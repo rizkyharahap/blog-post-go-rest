@@ -10,6 +10,7 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
+  pageExtensions: ["page.tsx"],
 };
 
 module.exports = withBundleAnalyzer(nextConfig);

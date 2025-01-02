@@ -10,9 +10,7 @@ export interface User {
 }
 
 export function getUserById(id: number) {
-  return authedHttp
-    .get<Response<User>>(`https://gorest.co.in/public/v1/users/${id}`)
-    .then((res) => res.data);
+  return authedHttp.get<Response<User>>(`/users/${id}`).then((res) => res.data);
 }
 
 export function getUsersByIds(ids: number[]) {

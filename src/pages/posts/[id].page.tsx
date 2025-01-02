@@ -1,21 +1,26 @@
-import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
+
+import { useParams, useRouter } from "next/navigation";
 
 import { useQuery } from "@tanstack/react-query";
-import { Avatar, Button, Flex, Skeleton, Typography } from "antd";
+import { Avatar, Flex, Skeleton, Typography } from "antd";
 
-import IcEdit from "@/assets/icons/IcEdit";
 import Navbar from "@/components/Navbar";
 import { getPostById } from "@/services/post";
-import { getUserById } from "@/services/user";
+import { getUserById, type User } from "@/services/user";
 import { readingTime } from "@/utils/readingTime";
 
-export default function PostDetailFeature() {
+import PostActionButtons from "./(component)/ActionButtons";
+
+export default function PostDetailPage() {
+  const router = useRouter();
   const params = useParams();
+  const id = params?.id as string;
 
   const postQuery = useQuery({
     queryKey: ["getPostById", params?.id],
-    queryFn: async () => await getPostById(Number(params.id)),
-    enabled: !!params?.id,
+    queryFn: async () => await getPostById(Number(id)),
+    enabled: !!id,
   });
 
   const userQuery = useQuery({
@@ -23,6 +28,15 @@ export default function PostDetailFeature() {
     queryFn: async () => await getUserById(postQuery.data!.data.user_id),
     enabled: !!postQuery.data?.data.user_id,
   });
+
+  const [profile, setProfile] = useState<User>();
+
+  useEffect(() => {
+    const profileStorage = JSON.parse(localStorage.getItem("profile") ?? "");
+
+    if (profileStorage)
+      setProfile(JSON.parse(localStorage.getItem("profile") ?? ""));
+  }, []);
 
   return (
     <>
@@ -52,17 +66,12 @@ export default function PostDetailFeature() {
               </Typography.Text>
             </Flex>
 
-            <Button
-              variant="filled"
-              color="default"
-              shape="circle"
-              icon={<IcEdit width={16} height={16} />}
-              className="min-w-8"
-              onClick={(e) => {
-                e.preventDefault();
-                // onClickUpdate(post.id);
-              }}
-            />
+            {profile?.id === postQuery.data?.data.user_id && (
+              <PostActionButtons
+                id={Number(id)}
+                onDeleteSucces={() => router.push("/")}
+              />
+            )}
           </>
         )}
       </div>

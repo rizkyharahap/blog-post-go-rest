@@ -7,7 +7,7 @@ import { type Post } from "@/services/post";
 import { type User } from "@/services/user";
 import { readingTime } from "@/utils/readingTime";
 
-import PostActionButtons from "./PostActionButtons";
+import PostActionButtons from "./ActionButtons";
 
 interface PostContentProps {
   posts?: (Post & { user?: User })[];
@@ -57,7 +57,10 @@ export default function PostContent({
                   className="min-w-8 border border-yellow-500"
                 />
 
-                <Typography.Text className="mb-0 w-full text-sm font-medium">
+                <Typography.Text
+                  id="author-name"
+                  className="mb-0 w-full text-sm font-medium"
+                >
                   {post.user?.name ?? "Unknown"}
                 </Typography.Text>
               </>
@@ -66,7 +69,11 @@ export default function PostContent({
             {isShowActions && <PostActionButtons id={post.id} />}
           </div>
 
-          <Typography.Title level={2} className="line-clamp-2 text-2xl">
+          <Typography.Title
+            id="title-article"
+            level={2}
+            className="line-clamp-2 text-2xl"
+          >
             {post.title}
           </Typography.Title>
 

@@ -13,8 +13,12 @@ import { deletePost } from "@/services/post";
 
 interface PostActionButtonsProps {
   id: number;
+  onDeleteSucces?(): void;
 }
-export default function PostActionButtons({ id }: PostActionButtonsProps) {
+export default function PostActionButtons({
+  id,
+  onDeleteSucces,
+}: PostActionButtonsProps) {
   const [messageApi, contextHolder] = message.useMessage();
   const router = useRouter();
   const [deletedId, setDeletedId] = useState<number | null>(null);
@@ -30,6 +34,8 @@ export default function PostActionButtons({ id }: PostActionButtonsProps) {
 
       messageApi.success("Success delete post!");
       setDeletedId(null);
+
+      onDeleteSucces?.();
     },
     onError(error) {
       if (isAxiosError(error)) {

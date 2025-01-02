@@ -15,7 +15,7 @@ export interface PostPayload {
 
 export function getPosts(page = 1, perPage = 10) {
   return authedHttp
-    .get<Response<Post[]>>(`https://gorest.co.in/public/v1/posts`, {
+    .get<Response<Post[]>>(`/posts`, {
       params: {
         page,
         per_page: perPage,
@@ -26,29 +26,24 @@ export function getPosts(page = 1, perPage = 10) {
 
 export function getPostsByUserId(userId: number, page = 1, perPage = 10) {
   return authedHttp
-    .get<Response<Post[]>>(
-      `https://gorest.co.in/public/v1/users/${userId}/posts`,
-      {
-        params: {
-          page,
-          per_page: perPage,
-        },
+    .get<Response<Post[]>>(`/users/${userId}/posts`, {
+      params: {
+        page,
+        per_page: perPage,
       },
-    )
+    })
     .then((res) => res.data);
 }
 
 export function getPostById(id: number) {
-  return authedHttp
-    .get<Response<Post>>(`https://gorest.co.in/public/v1/posts/${id}`)
-    .then((res) => res.data);
+  return authedHttp.get<Response<Post>>(`/posts/${id}`).then((res) => res.data);
 }
 
 export function createPost(payload: PostPayload) {
   const profile = JSON.parse(localStorage.getItem("profile") ?? "");
 
   return authedHttp
-    .post<Response<Post>>(`https://gorest.co.in/public/v1/posts`, {
+    .post<Response<Post>>(`/posts`, {
       ...payload,
       user_id: profile?.id,
       user: profile?.name,
@@ -60,7 +55,7 @@ export function updatePost(id: number, payload: PostPayload) {
   const profile = JSON.parse(localStorage.getItem("profile") ?? "");
 
   return authedHttp
-    .patch<Response<Post>>(`https://gorest.co.in/public/v1/posts/${id}`, {
+    .patch<Response<Post>>(`/posts/${id}`, {
       ...payload,
       user_id: profile?.id,
       user: profile?.name,
@@ -70,6 +65,6 @@ export function updatePost(id: number, payload: PostPayload) {
 
 export function deletePost(id: number) {
   return authedHttp
-    .delete<Response<Post>>(`https://gorest.co.in/public/v1/posts/${id}`)
+    .delete<Response<Post>>(`/posts/${id}`)
     .then((res) => res.data);
 }

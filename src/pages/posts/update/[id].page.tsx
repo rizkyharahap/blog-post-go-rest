@@ -1,23 +1,35 @@
+import { useParams } from "next/navigation";
 import { useRouter } from "next/router";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button, message, Typography } from "antd";
 import { isAxiosError } from "axios";
 
 import Navbar from "@/components/Navbar";
-import { createPost } from "@/services/post";
+import { getPostById, type PostPayload, updatePost } from "@/services/post";
 
-import PostForm from "./PostForm";
+import PostForm from "../(component)/Form";
 
-export default function PostNewFeature() {
+export default function PostUpdatePage() {
   const router = useRouter();
+  const params = useParams();
   const [messageApi, contextHolder] = message.useMessage();
   const queryClient = useQueryClient();
 
+  const postQuery = useQuery({
+    queryKey: ["getPostById", params?.id],
+    queryFn: async () => await getPostById(Number(params.id)),
+    enabled: !!params?.id,
+  });
+
   const postMutation = useMutation({
-    mutationFn: createPost,
+    mutationFn: (values: PostPayload) => updatePost(Number(params.id), values),
     onSuccess(data) {
-      messageApi.success("Success create new post!");
+      messageApi.success("Success update post!");
+
+      queryClient.invalidateQueries({
+        queryKey: ["getPostById", params.id],
+      });
       queryClient.invalidateQueries({
         queryKey: ["getPosts"],
         refetchType: "active",
@@ -41,9 +53,13 @@ export default function PostNewFeature() {
       {contextHolder}
       <Navbar />
 
-      <Typography.Title className="mt-6 text-3xl">New Post</Typography.Title>
+      <Typography.Title className="mt-6 text-3xl">Update Post</Typography.Title>
 
       <PostForm
+        initialValue={{
+          title: postQuery.data?.data?.title ?? "",
+          body: postQuery.data?.data?.body ?? "",
+        }}
         onSubmit={postMutation.mutate}
         isLoading={postMutation.isPending}
       >
