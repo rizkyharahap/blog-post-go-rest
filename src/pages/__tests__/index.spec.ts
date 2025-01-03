@@ -81,6 +81,16 @@ test.describe("Home Page Authorized", () => {
     // Set localStorage before each test
     await page.addInitScript(() => {
       localStorage.setItem("token", "mock-token");
+      localStorage.setItem(
+        "profile",
+        JSON.stringify({
+          id: 7614609,
+          name: "Rizki 5",
+          email: "Rizki.5@email.com",
+          gender: "male",
+          status: "active",
+        }),
+      );
       localStorage.setItem("expired_at", "2024-02-02T10:30:00.000Z");
     });
   });
@@ -125,7 +135,7 @@ test.describe("Home Page Authorized", () => {
 
   test("should get own posts data correctly", async ({ page }) => {
     // Mock api get posts
-    await page.route("**/*/v1/users/**", async (route) => {
+    await page.route("**/*/v1/users/*/posts**", async (route) => {
       route.fulfill({
         status: 200,
         contentType: "application/json",

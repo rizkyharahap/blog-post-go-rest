@@ -1,5 +1,7 @@
 import { useMemo } from "react";
 
+import { useRouter } from "next/router";
+
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
 import { logout } from "@/services/auth";
@@ -13,6 +15,8 @@ interface UsePostsProps {
   search?: string;
 }
 export function usePosts({ page, perPage, filter, search }: UsePostsProps) {
+  const router = useRouter();
+
   const postsQuery = useQuery({
     queryKey: ["getPosts", page, perPage, filter],
     queryFn: async () => {
@@ -26,6 +30,7 @@ export function usePosts({ page, perPage, filter, search }: UsePostsProps) {
       return getPostsByUserId(profile.id, page, perPage);
     },
     placeholderData: keepPreviousData,
+    enabled: router.isReady,
   });
 
   const userIds = useMemo(
@@ -66,7 +71,8 @@ export function usePosts({ page, perPage, filter, search }: UsePostsProps) {
   }, [postsQuery.data?.data, search, usersQuery.data]);
 
   return {
-    isLoadingPosts: postsQuery.isLoading || postsQuery.isFetching,
+    isLoadingPosts:
+      postsQuery.isPending || postsQuery.isLoading || postsQuery.isFetching,
     isLoadingUsers: usersQuery.isLoading || usersQuery.isFetching,
     posts: filteredPost,
     postsPagination: postsQuery.data?.meta?.pagination,
