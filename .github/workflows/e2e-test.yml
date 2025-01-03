@@ -1,4 +1,4 @@
-name: Playwright Tests
+name: E2E Tests
 on:
   push:
     branches: [main, master]
@@ -19,6 +19,10 @@ jobs:
           node-version: 20.17.0
       - name: Install dependencies
         run: npm ci
+      - name: Check linting
+        run: npm run lint
+      - name: Check format code
+        run: npm run prettier
       - name: Build app
         run: npm run build
       - name: Install Playwright Browsers
