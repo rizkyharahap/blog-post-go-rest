@@ -51,6 +51,7 @@ export default function PostActionButtons({
       {contextHolder}
 
       <Button
+        id="btn-update"
         variant="filled"
         color="default"
         shape="circle"
@@ -62,6 +63,7 @@ export default function PostActionButtons({
         }}
       />
       <Button
+        id="btn-delete"
         variant="filled"
         color="danger"
         shape="circle"
@@ -91,6 +93,7 @@ export default function PostActionButtons({
           okButtonProps={{
             color: "danger",
             variant: "solid",
+            id: "btn-delete-confirmation",
           }}
         >
           <Typography.Paragraph>

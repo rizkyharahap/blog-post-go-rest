@@ -57,8 +57,9 @@ export default function HomePage() {
 
       <Posts />
 
-      <Link href="/posts/new">
+      <Link href="/posts/new" passHref>
         <FloatButton
+          aria-label="new-btn"
           tooltip={<span>New Post</span>}
           icon={<IcPlus width={16} height={16} />}
           type="primary"

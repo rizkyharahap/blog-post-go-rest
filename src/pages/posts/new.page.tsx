@@ -57,7 +57,7 @@ export default function PostNewPage() {
           size="large"
           loading={postMutation.isPending}
         >
-          Update
+          Publish
         </Button>
       </PostForm>
     </>

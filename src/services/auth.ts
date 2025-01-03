@@ -43,9 +43,9 @@ export function login({ name, token }: LoginPayload) {
 }
 
 export function logout() {
-  localStorage.removeItem("profile");
-  localStorage.removeItem("token");
-  localStorage.removeItem("expired_at");
+  // localStorage.removeItem("profile");
+  // localStorage.removeItem("token");
+  // localStorage.removeItem("expired_at");
 
   window.location.replace("/login");
 }

@@ -24,7 +24,7 @@ export default function PostForm({
   return (
     <Form<PostPayload>
       form={form}
-      name="login"
+      name="post"
       layout="vertical"
       autoComplete="off"
       onFinish={onSubmit}
